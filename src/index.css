@@ -1,0 +1,23 @@
+:root {
+  --White_Smoke: hsl(45, 22.2%, 96.6%);
+  --Blue_Night: hsl(222, 16.7%, 23.5%);
+  --Geranium_Red: hsl(1.1, 58.2%, 64.3%);
+  --Big_Stone: hsl(200, 17.4%, 23.7%);
+  --Iridescence: hsl(211, 62%, 86%);
+  --Desert_Paper: hsl(23, 47%, 93%);
+  --Lime:hsl(96, 100%, 50%);
+  --Purple: hsl(286, 97%, 85%);
+
+/* //? Primary colours */
+  --primary1: var(--White_Smoke);
+  --primary2: var(--Blue_Night);
+  --primary3: var(--Geranium_Red);
+/* //? Secondary colours */
+  --secondary1:  var(--Big_Stone);
+  --secondary2: var(--Iridescence);
+  --secondary3: var(--Desert_Paper)
+  /* //? Call to action colours */
+  --CAT1: var(--Lime)
+  --CAT2: var(--Purple)
+}
+html{background-color: var(--Big_Stone);}
