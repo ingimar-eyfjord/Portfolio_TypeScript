@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Raleway:wght@400;700&display=swap');
 :root {
   --White_Smoke: hsl(45, 22.2%, 96.6%);
   --Blue_Night: hsl(222, 16.7%, 23.5%);
@@ -7,7 +8,6 @@
   --Desert_Paper: hsl(23, 47%, 93%);
   --Lime:hsl(96, 100%, 50%);
   --Purple: hsl(286, 97%, 85%);
-
 /* //? Primary colours */
   --primary1: var(--White_Smoke);
   --primary2: var(--Blue_Night);
@@ -19,5 +19,27 @@
   /* //? Call to action colours */
   --CAT1: var(--Lime)
   --CAT2: var(--Purple)
+
+  --Oswald: 'Oswald', sans-serif;
+  --Raleway: 'Raleway', sans-serif;
+  --Light: 400;
+  --Bold: 700;
 }
-html{background-color: var(--Big_Stone);}
+html{background-color: var(--Big_Stone);
+font-family: 'Raleway', sans-serif;}
+
+ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+}
+
+ul li{
+  list-style: none;
+  color: var(--White_Smoke);
+font-family: 'Oswald', sans-serif;
+font-weight: var(--Bold);
+font-size: 2rem;
+cursor: pointer;
+}
