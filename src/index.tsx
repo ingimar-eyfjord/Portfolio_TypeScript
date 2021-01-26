@@ -13,10 +13,10 @@ import Navigation from "./components/navigation";
 function App(): JSX.Element {
   const [PathState, setPathState] = useState("Landing_page");
   useEffect(() => {
-    setPathState("Landing_page");
+    setPathState("Work");
   }, []);
 
-  function onNavClick(e: string) {
+  async function onNavClick(e: string) {
     setPathState(e);
   }
 

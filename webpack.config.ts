@@ -1,14 +1,16 @@
 import path from "path";
 import webpack from "webpack";
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+
 const config: webpack.Configuration = {
-mode: 'development',
+  mode: "development",
   entry: "./src/index.tsx",
   module: {
-    rules: [ {
-      test: /\.css$/i,
-      use: ['style-loader', 'css-loader'],
-    },
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
       {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,

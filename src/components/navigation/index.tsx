@@ -10,7 +10,7 @@ export default function Navigation(props: onNavClick): JSX.Element {
       <ul>
         <li
           onClick={() => {
-            props.onNavClick("Home");
+            props.onNavClick("Landing_page");
           }}
         >
           Home
