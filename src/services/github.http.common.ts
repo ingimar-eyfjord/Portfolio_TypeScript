@@ -4,6 +4,6 @@ export default axios.create({
   baseURL: "https://api.github.com",
   headers: {
     "Content-type": "application/json",
-    authorization: `token 8a2845fe21a6ab72772faebbc0aa2555553e06c2`,
+    authorization: "token b28dad5aea762c8f9c54ea267a853376d2a96d72",
   },
 });

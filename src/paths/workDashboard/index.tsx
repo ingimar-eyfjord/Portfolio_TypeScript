@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import GitHubService from "../../services/github.service";
 import DataLoader from "../../components/loader";
+import moment from "moment";
+import _ from "lodash";
+import chunk from "lodash/chunk";
 export interface GitHubObject {
   full_name: string;
   html_url: string;
   updated_at: string;
   stargazers_count: number;
+  name: string;
+  created_at: string;
 }
 export interface Events {
   Name: string;
@@ -24,69 +29,114 @@ export interface Events {
             message: string;
           }
         ];
+        member: {
+          html_url: string;
+          login: string;
+        };
       };
       type: string;
     }
   ];
   updated_at: string;
+  created_at: string;
+  gitEvents: [
+    {
+      days: Array<number>;
+      total: number;
+      week: number;
+    }
+  ];
 }
 
 export default function WorkDashboard(): JSX.Element {
-  const [visuals, setVisuals] = useState<JSX.Element[]>();
-  useEffect(() => {
-    MakeGitContainer();
-    async function MakeGitContainer() {
-      const Data = await GetGitData();
-      if (Data !== undefined) {
-        console.log(Data);
-        const GithubVisual = Data.map((e, index) => (
-          <div key={index} className="container git">
-            <div>
-              <h3 className="containerHeader">{e.Name}</h3>
-              <a href={e.URL}>Link to github</a>
-              <p>Stargazers: {e.stargazers_count}</p>
-              <p>Last updated: {e.updated_at}</p>
-            </div>
-            <div>
-              <h3 className="containerHeader">Last 5 events</h3>
-              {e.Events.map((t, secondIndex) =>
-                secondIndex < 5 ? (
-                  <div key={secondIndex} className="GitEvent">
-                    <p>Type: {t.type}</p>
-                    {t.payload.commits
-                      ? t.payload.commits.map((r, thirdIndex) => (
-                          <p key={thirdIndex}>Message: {r.message}</p>
-                        ))
-                      : ""}
-                  </div>
-                ) : (
-                  ""
-                )
-              )}
-            </div>
-          </div>
-        ));
-        console.log(GithubVisual);
-        setVisuals(GithubVisual);
-      }
-    }
+  const [RepoCards, setRepoCard] = useState<JSX.Element[]>();
+  const [GitData, SetGitData] = useState<Array<Events>>();
+
+  const MakeGitContainer = useCallback(async (GitHubRepos) => {
+    const Data = await GetGitData(GitHubRepos);
+    SetGitData(Data);
   }, []);
 
-  async function GetGitData() {
-    const GitHubRepos = await GitHubService.GetRepos();
+  useEffect(() => {
+    if (GitData !== undefined) {
+      const ordered = _.orderBy(
+        GitData,
+        (o) => {
+          return moment(o.updated_at);
+        },
+        [`desc`]
+      );
+      const GithubVisual = ordered.map((e, index) => (
+        <div key={index} className="container git">
+          <div>
+            <h3 className="containerHeader">{e.Name}</h3>
+            <a href={e.URL}>Link to github</a>
+            <p>Stargazers: {e.stargazers_count}</p>
+            <p>Created at: {moment(e.created_at).format("DD-MM-YYYY hh:mm")}</p>
+            <p>
+              Last updated: {moment(e.updated_at).format("DD-MM-YYYY hh:mm")}
+            </p>
+            <p>Commits over the last year:</p>
+          </div>
+          <div>
+            <h3 className="containerHeader">Last 5 events</h3>
+            {e.Events.map((t, secondIndex) =>
+              secondIndex < 5 ? (
+                <div key={secondIndex} className="GitEvent">
+                  <p>Type: {t.type}</p>
+                  {t.type === "MemberEvent" ? (
+                    <div>
+                      <p>{t.payload.member.login}</p>
+                      <p>{t.payload.member.html_url}</p>
+                    </div>
+                  ) : t.payload.commits ? (
+                    t.payload.commits.map((r, thirdIndex) => (
+                      <p key={thirdIndex}>Message: {r.message}</p>
+                    ))
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )
+            )}
+          </div>
+        </div>
+      ));
+      setRepoCard(GithubVisual);
+    }
+  }, [GitData]);
+
+  useEffect(() => {
+    initiate();
+    async function initiate() {
+      const GitHubRepos = await GitHubService.GetRepos();
+      MakeGitContainer(GitHubRepos);
+    }
+  }, [MakeGitContainer]);
+
+  async function GetGitData(GitHubRepos: Array<GitHubObject>) {
     const O: Array<Events> = [];
     for (let i = 0; i < GitHubRepos.length; i++) {
       const GitHubEvents = await GitHubService.getEventsForRepo(
         GitHubRepos[i].full_name
       );
-      console.log("events", GitHubEvents);
+      const GitCommitEvents = await GitHubService.GetCommitEvents(
+        GitHubRepos[i].full_name
+      );
+
+      console.log("Commit", GitCommitEvents);
+
       if (GitHubEvents.length > 0) {
         O.push({
-          Name: GitHubRepos[i].full_name,
+          Name: GitHubRepos[i].name,
           URL: GitHubRepos[i].html_url,
           stargazers_count: GitHubRepos[i].stargazers_count,
           updated_at: GitHubRepos[i].updated_at,
           Events: GitHubEvents,
+          created_at: GitHubRepos[i].created_at,
+          gitEvents: GitCommitEvents,
         });
       }
     }
@@ -94,13 +144,26 @@ export default function WorkDashboard(): JSX.Element {
   }
 
   return (
-    <div className="dashboardContainer">
+    <div className="dashboardContainer gitContainer">
+      <h2>Github playground</h2>
+      <div className="profileContainer">
+        <h2>Profile</h2>
+        <div className="ProfileImgContainer"></div>
+        <label htmlFor="Search">Search Profile</label>
+        <input
+          id="Search"
+          type="text"
+          placeholder="Currently showing my profile"
+        />
+      </div>
+
+      <h2>My most recent Github activity</h2>
+
       <section className="githubDashBoard">
-        <h2>My most recent Github activity</h2>
-        {visuals === undefined ? (
+        {RepoCards === undefined ? (
           <DataLoader Text={"Fetching data from Github"}></DataLoader>
         ) : (
-          visuals
+          RepoCards
         )}
       </section>
     </div>

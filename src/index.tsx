@@ -23,9 +23,7 @@ function App(): JSX.Element {
   return (
     <div className="appContainer">
       <Navigation onNavClick={onNavClick}></Navigation>
-      <h1>My React and TypeScript App!</h1>
       {PathState === "Landing_page" ? <LandingPage /> : ""}
-
       {PathState === "Work" ? <WorkDashboard /> : ""}
     </div>
   );

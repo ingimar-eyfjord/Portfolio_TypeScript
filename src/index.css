@@ -29,7 +29,7 @@
   margin: 0;
   padding:0;
 }
-html{background-color: var(--Big_Stone);
+html{background-color: var(--Desert_Paper);
 font-family: 'Raleway', sans-serif;}
 
 .flexRow{
@@ -50,38 +50,48 @@ ul{
 
 ul li{
   list-style: none;
-  color: var(--White_Smoke);
+  color: var(--Big_Stone);
 font-family: 'Oswald', sans-serif;
 font-weight: var(--Bold);
 font-size: 2rem;
 cursor: pointer;
 }
-
-.githubDashBoard{
-  width: 60vw;
-  background-color:var(--Blue_Night);
-  display: grid;
-  grid-template-columns: 1fr;
+.gitContainer{
+  background-color:var(--Light);
   border-radius: 10px;
-  margin: 2rem;
+}
+.githubDashBoard{
+  width: calc(100vw - 2rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0.5rem;
 }
 .githubDashBoard h2{
-  color: var(--White_Smoke);
+  color: var(--Big_Stone);
 }
 .GitEvent{
-  background-color: var(--Geranium_Red);
-  display: flex;
-  flex-direction: row;
-  align-content: flex-start;
-  justify-content: space-between;
+  background-color: var(--Big_Stone);
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin: 1rem 0 1rem 0;
+  padding:1rem;
+  border-radius: 5px;
+}
+.githubDashBoard .container:first-child .containerHeader{
+  border-radius: 5px 0px 0px 5px;
+}
+.githubDashBoard .container:last-child .containerHeader{
+  border-radius: 0px 5px 5px 0px;
 }
 .GitEvent p{
   color: var(--Desert_Paper);
+  font-weight: bold;
 }
 .container{
-  margin: 2rem;
+  margin: 1rem;
+  padding: 1rem;
   border-radius: 5px;
-  background-color: var(--Iridescence);
+  background-color: var(--White_Smoke);
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -91,7 +101,7 @@ cursor: pointer;
     padding: 5px;
 
 }
-.dataLoader p{color: var(--White_Smoke);}
+.dataLoader p{color: var(--Big_Stone);}
 
 .lds-ellipsis {
   display: inline-block;
@@ -105,7 +115,7 @@ cursor: pointer;
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--Big_Stone);
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .lds-ellipsis div:nth-child(1) {
@@ -147,4 +157,12 @@ cursor: pointer;
   100% {
     transform: translate(24px, 0);
   }
+}
+.profileContainer{
+display: flex;
+flex-direction: column;
+background-color: var(--Blue_Night);
+height: 30vh;
+width: 80vw;
+border-radius: 5px;
 }
